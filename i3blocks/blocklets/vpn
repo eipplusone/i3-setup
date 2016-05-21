@@ -1,0 +1,25 @@
+#!/bin/bash
+
+VPN_DIR='/proc/sys/net/ipv4/conf/tun0'
+
+if [ "$BLOCK_BUTTON" = 2 ]; then
+  if [ -d "${VPN_DIR}" ]; then
+    nmcli con down id PIA
+  else
+    nmcli con up id PIA
+  fi
+fi
+
+if [ -d "${VPN_DIR}" ]; then
+
+  EXT_IP="$(ip route | tail -n 1 | cut -d' ' -f1)"
+
+  echo "$EXT_IP"
+  echo "on"
+  echo "#859900"
+else
+  echo "off"
+  echo "off"
+  echo ""
+fi
+

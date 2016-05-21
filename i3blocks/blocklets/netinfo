@@ -1,0 +1,77 @@
+#!/bin/bash
+# Copyright (C) 2014 Julien Bonjean <julien@bonjean.info>
+# Copyright (C) 2014 Alexander Keller <github@nycroth.com>
+# Copyright (C) 2015 Blaine Story <theblainestory@gmail.com>
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Use the provided interface, otherwise the device used for the default route
+
+ROUTE=$(ip route)
+
+
+IF=$(echo "$ROUTE" | awk '/^default/ { print $5 ; exit }')
+if [[ "$IF" = "tun0" ]]; then
+  if [[ $(echo "$ROUTE" | grep eth0 | wc -l) != "0" ]]; then
+    IF="eth0"
+  elif [[ "$(echo "$ROUTE" | grep wlan0 | wc -l)" != "0" ]]; then
+    IF="wlan0" 
+  fi
+fi
+
+if [[ "$(cat /sys/class/net/$IF/operstate)" = "down" ]]; then
+  echo "down" # full text
+  echo "down" # short text
+  echo "#FF0000" # color
+  exit
+fi
+
+IPADDR="$(ip addr show $IF | grep inet | head -n 1 | cut -f6 -d' ' | cut -f1 -d'/')"
+
+#------------------------------------------------------------------------
+
+if [ "$IF" == "wlan0" ]; then
+  TYPE="W"
+  QUALITY=$(grep $IF /proc/net/wireless | awk '{ print int($3 * 100 / 70) }')
+  ESSID=$(/sbin/iwconfig $IF | grep ESSID | cut -d'"' -f2)
+
+  WIFI_FULL="($QUALITY% at $ESSID) "
+  WIFI_SHORT="($QUALITY%) "
+
+  if [[ $QUALITY -ge 80 ]]; then
+    COLOR="#859900"
+  elif [[ $QUALITY -lt 80 ]]; then
+    COLOR="#B58900"
+  elif [[ $QUALITY -lt 60 ]]; then
+    COLOR="#CB4B16"
+  elif [[ $QUALITY -lt 40 ]]; then
+    COLOR="#DC322F"
+  fi 
+else
+  TYPE="E"
+  WIFI_FULL=""
+  WIFI_SHORT=""
+  COLOR=""
+fi
+
+#------------------------------------------------------------------------
+
+if [ "$IPADDR" != "" ]; then
+  echo "$TYPE: $WIFI_FULL$IPADDR" # full text
+else
+  echo "Getting IP..."
+fi
+
+echo "$WIFI_SHORT" # short text
+echo "$COLOR"

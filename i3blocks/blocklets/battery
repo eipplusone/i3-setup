@@ -1,0 +1,51 @@
+#!/bin/bash
+
+BATTERY="${BLOCK_INSTANCE:-0}"
+BATTERY_INFO=$(acpi -b | grep "Battery ${BATTERY}")
+BATTERY_STATE=$(echo "${BATTERY_INFO}" | grep -wo "Full\|Charging\|Discharging")
+BATTERY_POWER=$(echo "${BATTERY_INFO}" | grep -o '[0-9]\+%' | tr -d '%')
+BATTERY_REMAINING=""
+
+URGENT_VALUE=10
+
+COLOR=""
+
+if [[ "${BATTERY_STATE}" = "Discharging" ]]; then
+
+  BATTERY_REMAINING=$(echo "${BATTERY_INFO}" | cut -d' ' -f5 | cut -d: -f1-2)
+
+  if [[ "${BATTERY_POWER}" -le 20 ]] ; then
+    COLOR="#FF0000"
+  elif [[ "${BATTERY_POWER}" -le 40 ]] ; then
+    COLOR="#FFAE00"
+  elif [[ "{$BATTERY_POWER}" -le 60 ]] ; then
+    COLOR="#FFF600"
+  elif [[ "{$BATTERY_POWER}" -le 85 ]] ; then
+    COLOR="#A8FF00"
+  fi
+elif [[ "${BATTERY_STATE}" = "Charging" ]]; then
+  BATTERY_REMAINING=$(echo "${BATTERY_INFO}" | cut -d' ' -f5 | cut -d: -f1-2)
+fi
+
+
+if [[ "${BATTERY_STATE}" = "Charging" ]]; then
+  echo "${BATTERY_POWER}% CHR (${BATTERY_REMAINING})"
+  echo "${BATTERY_POWER}% CHR (${BATTERY_REMAINING})"
+  echo "$COLOR"
+elif [[ "${BATTERY_STATE}" = "Discharging" ]]; then
+  echo "${BATTERY_POWER}% DIS (${BATTERY_REMAINING})"
+  echo "${BATTERY_POWER}% DIS (${BATTERY_REMAINING})"
+  echo "$COLOR"
+elif [ -z "${BATTERY_INFO}" ]; then
+  echo ""
+  echo ""
+  echo ""
+else
+  echo "${BATTERY_POWER}%"
+  echo "${BATTERY_POWER}%"
+  echo "$COLOR"
+fi
+
+if [[ "${BATTERY_POWER}" -le "${URGENT_VALUE}" ]]; then
+  exit 33
+fi

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+
+case $BLOCK_BUTTON in
+  4) xbacklight -inc 10 ;;
+  5) xbacklight -dec 10 ;;
+esac
+
+sleep .1
+
+echo "$(printf %.0f%% $(xbacklight -get))"

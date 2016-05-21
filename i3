@@ -1,1 +1,0 @@
-/home/blaine/Sync/dotfiles/x220/dotconfig/i3

@@ -1,0 +1,66 @@
+#!/bin/sh
+# Copyright (C) 2014 Julien Bonjean <julien@bonjean.info>
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+TYPE="${BLOCK_INSTANCE:-mem}"
+
+awk -v type=$TYPE '
+/^MemTotal:/ {
+	mem_total=$2
+}
+/^MemFree:/ {
+	mem_free=$2
+}
+/^Buffers:/ {
+	mem_free+=$2
+}
+/^Cached:/ {
+	mem_free+=$2
+}
+/^SwapTotal:/ {
+	swap_total=$2
+}
+/^SwapFree:/ {
+	swap_free=$2
+}
+END {
+	# full text
+	if (type == "swap")
+		printf("%.1fG\n", (swap_total-swap_free)/1024/1024)
+	else {
+    mem_used=((mem_total - mem_free)/1024)
+    byte_size=77 # 'M' char code
+
+    if (mem_used > 1024) {
+      mem_used=(mem_used/1024)
+      byte_size=71
+
+      if (mem_used > 6) {
+        color="#b58900"
+      }
+      if (mem_used > 7) {
+        color="#dc322f"
+      }
+    }
+		printf("RAM %.1f%c\n", mem_used, byte_size)
+		printf("RAM %.1f%c\n", mem_used, byte_size)
+    printf("%s\n", color)
+  }
+
+	# TODO: short text
+
+	# TODO: color (if less than X%)
+}
+' /proc/meminfo

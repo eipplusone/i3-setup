@@ -1,0 +1,53 @@
+#!/bin/bash
+#
+# Copyright 2015 Blaine Story <theblainestory@gmail.com>
+#
+# Licenced under the terms of the GNU GPL v3.
+#
+# This script is meant to be used with i3blocks. It allows easy switching 
+# between keyboard layouts of dvorak, dvorak-international, and qwerty layouts.
+# 
+# Left click to cycle between dvorak and dvorak-international.
+# Right click to cycle between dvorak and qwerty.
+
+function getLayout {
+  echo $(setxkbmap -query | grep layout | cut -d' ' -f6)
+}
+
+function getVariant {
+  echo $(setxkbmap -query | grep variant | cut -d' ' -f5)
+}
+
+layout=$(getLayout)
+variant=$(getVariant)
+
+# toggles
+if [ "$BLOCK_BUTTON" == 1 ]; then
+  if [ "$variant" != "dvorak" ]; then
+    setxkbmap us -variant dvorak
+  else
+    setxkbmap us -variant dvorak-intl
+  fi
+elif [ "$BLOCK_BUTTON" == 3 ]; then
+  if [ -n "$variant" ]; then
+    setxkbmap us
+  else
+    setxkbmap us -variant dvorak
+  fi
+elif [[ -z "$BLOCK_BUTTON" ]]; then
+  setxkbmap us -variant dvorak
+fi
+
+layout=$(getLayout)
+variant=$(getVariant)
+
+# print new keymap
+if [ "$variant" == "dvorak" ]; then
+  map="dvorak"
+elif [ "$variant" == "dvorak-intl" ]; then
+  map="dv-intl"
+else
+  map="qwerty"
+fi
+
+echo "$map"

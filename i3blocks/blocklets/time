@@ -1,0 +1,8 @@
+#!/bin/bash
+
+TIME=$(date '+%a %Y-%m-%d %I:%M:%S %p')
+
+case $BLOCK_BUTTON in
+  1) echo $TIME && orage -t ;;
+  *) echo $TIME ;;
+esac

@@ -1,0 +1,373 @@
+# i3 config file (v4)
+# Please see http://i3wm.org/docs/userguide.html for a complete reference!
+
+# set keymap
+exec --no-startup-id setxkbmap us -variant dvorak
+
+set $mod Mod1
+#set $mod Mod4
+
+# Font for window titles. Will also be used by the bar unless a different font
+# is used in the bar {} block below.
+#font pango:Envy Code R 12px
+font pango: Terminus 10px
+#font pango: M+1m 12px
+
+# Default layout <default|stacking|tabbed>
+workspace_layout default
+
+# Remove 1px border around scrollbars
+hide_edge_borders vertical
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# start a terminal
+bindsym $mod+Return exec urxvt
+
+# start a filemanager
+bindsym $mod+Shift+Return exec thunar
+
+# kill focused window
+bindsym $mod+j kill
+
+# start dmenu (a program launcher)
+bindsym $mod+e exec --no-startup-id j4-dmenu-desktop
+
+# change focus
+bindsym $mod+h focus left
+bindsym $mod+t focus down
+bindsym $mod+n focus up
+bindsym $mod+s focus right
+
+# alternatively, you can use the cursor keys:
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+# move focused window
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+t move down
+bindsym $mod+Shift+n move up
+bindsym $mod+Shift+s move right
+
+# alternatively, you can use the cursor keys:
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# split in horizontal orientation
+bindsym $mod+d split h
+
+# split in vertical orientation
+bindsym $mod+k split v
+
+# enter fullscreen mode for the focused container
+bindsym $mod+u fullscreen toggle
+
+# change container layout (stacked, tabbed, toggle split)
+bindsym $mod+o layout stacking
+bindsym $mod+comma layout tabbed
+bindsym $mod+period layout toggle split
+
+# toggle tiling / floating
+bindsym $mod+Shift+space floating toggle
+
+# change focus between tiling / floating windows
+bindsym $mod+space focus mode_toggle
+
+# focus the parent container
+bindsym $mod+a focus parent
+
+set $workspace1 "1"
+set $workspace2 "2"
+set $workspace3 "3"
+set $workspace4 "4"
+set $workspace5 "5"
+set $workspace6 "6"
+set $workspace7 "7"
+set $workspace8 "8"
+set $workspace9 "9"
+set $workspace10 "10"
+
+# focus the child container
+bindsym $mod+Shift+a focus child
+
+# switch to workspace
+bindsym $mod+w workspace prev
+bindsym $mod+v workspace next
+bindsym $mod+1 workspace $workspace1
+bindsym $mod+2 workspace $workspace2
+bindsym $mod+3 workspace $workspace3
+bindsym $mod+4 workspace $workspace4
+bindsym $mod+5 workspace $workspace5
+bindsym $mod+6 workspace $workspace6
+bindsym $mod+7 workspace $workspace7
+bindsym $mod+8 workspace $workspace8
+bindsym $mod+9 workspace $workspace9
+bindsym $mod+0 workspace $workspace10
+
+# move focused container to workspace
+bindsym $mod+Shift+w move container to workspace prev
+bindsym $mod+Shift+v move container to workspace next
+bindsym $mod+Shift+1 move container to workspace $workspace1
+bindsym $mod+Shift+2 move container to workspace $workspace2
+bindsym $mod+Shift+3 move container to workspace $workspace3
+bindsym $mod+Shift+4 move container to workspace $workspace4
+bindsym $mod+Shift+5 move container to workspace $workspace5
+bindsym $mod+Shift+6 move container to workspace $workspace6
+bindsym $mod+Shift+7 move container to workspace $workspace7
+bindsym $mod+Shift+8 move container to workspace $workspace8
+bindsym $mod+Shift+9 move container to workspace $workspace9
+bindsym $mod+Shift+0 move container to workspace $workspace10
+
+# make sure workspace 1 starts on laptop
+workspace 1 output LVDS1
+
+workspace_auto_back_and_forth yes
+
+bindsym $mod+Tab             workspace next
+bindsym $mod+Shift+Tab       workspace prev
+
+# automatically move certain apps
+assign [class="Firefox"] $workspace2
+assign [class="Telegram"] $workspace9
+assign [class="KeePass2"] $workspace10
+
+# reload the configuration file
+bindsym $mod+Shift+j reload
+# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym $mod+Shift+p restart
+# exit i3 (logs you out of your X session)
+bindsym $mod+Shift+period exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+
+set $system_power_mode "(s)hutdown or (r)eboot (Esc to exit)"
+
+# system/power menu
+mode $system_power_mode {
+  # dvorak equivalents
+  bindsym o exec systemctl poweroff
+  bindsym p exec systemctl reboot
+
+  # qwerty
+  bindsym s exec systemctl poweroff
+  bindsym r exec systemctl reboot
+
+  bindsym Escape mode "default"
+}
+bindsym $mod+Shift+Delete mode $system_power_mode
+
+# resize window (you can also use the mouse for that)
+mode "resize" {
+  # These bindings trigger as soon as you enter the resize mode
+
+  # Pressing left will shrink the window’s width.
+  # Pressing right will grow the window’s width.
+  # Pressing up will shrink the window’s height.
+  # Pressing down will grow the window’s height.
+  bindsym h resize shrink width 10 px or 10 ppt
+  bindsym t resize grow height 10 px or 10 ppt
+  bindsym n resize shrink height 10 px or 10 ppt
+  bindsym s resize grow width 10 px or 10 ppt  
+
+  # same bindings, but for the arrow keys
+  bindsym Left resize shrink width 10 px or 10 ppt
+  bindsym Down resize grow height 10 px or 10 ppt bindsym Up resize shrink height 10 px or 10 ppt
+  bindsym Right resize grow width 10 px or 10 ppt
+
+  # precise resize mode
+  bindsym l mode "resize_precise"
+  bindsym p mode "resize_precise"
+
+  # back to normal: Enter or Escape
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+}
+
+mode "resize_precise" {
+  bindsym h resize shrink width 1 px or 1 ppt
+  bindsym t resize grow height 1 px or 1 ppt
+  bindsym n resize shrink height 1 px or 1 ppt
+  bindsym s resize grow width 1 px or 1 ppt
+
+  bindsym p mode "resize"
+  bindsym l mode "resize"
+  bindsym Escape mode "default"
+}
+
+bindsym $mod+p mode "resize"
+
+# volume control
+bindsym XF86AudioRaiseVolume exec --no-startup-id "export BLOCK_BUTTON=4; ~/.config/i3blocks/blocklets/audio"
+bindsym XF86AudioLowerVolume exec --no-startup-id "export BLOCK_BUTTON=5; ~/.config/i3blocks/blocklets/audio"
+bindsym XF86AudioMute exec --no-startup-id "export BLOCK_BUTTON=2; ~/.config/i3blocks/blocklets/audio"
+
+# Media player controls
+bindsym XF86AudioPlay exec --no-startup-id "playerctl play-pause; cmus-remote -u"
+bindsym XF86AudioNext exec --no-startup-id "playerctl next; cmus-remote -n"
+bindsym XF86AudioPrev exec --no-startup-id "playerctl previous; cmus-remote -r"
+
+# brightness notification
+bindsym XF86MonBrightnessUp exec --no-startup-id pkill -RTMIN+12 i3blocks
+bindsym XF86MonBrightnessDown exec --no-startup-id pkill -RTMIN+12 i3blocks
+
+# disable screen blanking
+exec --no-startup-id xset dpms 0 0 0
+exec --no-startup-id xset s off
+
+#######################################
+# Colors!                             #
+#######################################
+
+
+### Bar ###############################
+# a=bg, b=statusline, c=separator #####
+#######################################
+# Color of bar                        #
+set $color1a "#002b36"
+set $color1b "#93a1a1"
+set $color1c "#586e75"
+#                                     #
+# a=border, b=bg, c=text ##############
+# Color of focused workspace          #
+set $color2a "#268bd2"
+set $color2b "#268bd2"
+set $color2c "#fdf6e3"
+#                                     #
+# Color of active workspace           #
+set $color3a "#586e75"
+set $color3b "#586e75"
+set $color3c "#002b36"
+#                                     #
+# Color of inactive workspace         #
+set $color4a "#073642"
+set $color4b "#002b36"
+set $color4c "#839496"
+#                                     #
+# Color of urgent workspace           #
+set $color5a "#dc322f"
+set $color5b "#dc322f"
+set $color5c "#fdf6e3"
+#                                     #
+#######################################
+
+
+### Windows ###########################
+# a=border, b=bg, c=text, d=indicator #
+#######################################
+# Color of active window              #
+set $color6a "#002b36"
+set $color6b "#268bd2"
+set $color6c "#FDF6E3"
+set $color6d "#268BD2"
+#                                     #
+# Color of inactive window            #
+set $color7a "#002B36"
+set $color7b "#586E75"
+set $color7c "#FDF6E3"
+set $color7d "#073642"
+#                                     #
+# Color of unfocused window           #
+set $color8a "#002b36"
+set $color8b "#073642"
+set $color8c "#839496"
+set $color8d "#073642"
+#                                     #
+# Color of alert window               #
+set $color9a "#002B36"
+set $color9b "#DC322F"
+set $color9c "#FDF6E3"
+set $color9d "#002B36"
+#                                     #
+#######################################
+
+# Change the colors
+#                        border   bg       text     indicator
+client.focused           $color6a $color6b $color6c $color6d
+client.focused_inactive  $color7a $color7b $color7c $color7d
+client.unfocused         $color8a $color8b $color8c $color8d
+client.urgent            $color9a $color9b $color9c $color9d
+
+# Force certain apps to float
+for_window [window_type="dialog"] floating enable
+for_window [window_type="menu"] floating enable
+for_window [title="galculator"] floating enable
+for_window [title="About Mozilla Firefox"] floating enable
+for_window [title="File Operation Progress"] floating enable
+for_window [class="Tor Browser"] floating enable
+for_window [class="Pidgin"] floating enable
+for_window [class="Orage"] floating enable
+for_window [class="Transmission-gtk"] floating enable
+for_window [class="File-roller"] floating enable
+for_window [class="Anki"] floating enable
+
+# Start i3bar to display a workspace bar (plus the system information i3status
+# finds out, if available)
+bar {
+  output LVDS1
+  status_command i3blocks
+
+
+  position top
+  tray_output LVDS1
+
+  colors {
+    background $color1a
+    statusline $color1b
+    separator  $color1c
+
+    #                    border   bg       text
+    focused_workspace    $color2a $color2b $color2c
+    active_workspace     $color3a $color3b $color3c
+    inactive_workspace   $color4a $color4b $color4c
+    urgent_workspace     $color5a $color5b $color5c
+  }
+}
+
+bar {
+  output HDMI1
+  position top
+  tray_output LVDS1
+
+  colors {
+    background $color1a
+    statusline $color1b
+    separator  $color1c
+
+    #                    border   bg       text
+    focused_workspace    $color2a $color2b $color2c
+    active_workspace     $color3a $color3b $color3c
+    inactive_workspace   $color4a $color4b $color4c
+    urgent_workspace     $color5a $color5b $color5c
+  }
+}
+# Initialize taskbar icons
+exec --no-startup-id redshift-gtk
+
+# lock screen
+bindsym Ctrl+Shift+n exec i3lock -c $color1a -e
+
+# start compositor
+exec --no-startup-id compton --config ~/.config/compton.conf -b
+
+# disable system beep
+exec --no-startup-id xset -b
+
+# set desktop wallpaper
+exec_always --no-startup-id feh --bg-scale "/home/blaine/Sync/pictures/Wallpapers/IWantToBelieve.png"
+
+# Calendar (start orage and hide immediately)
+exec --no-startup-id orage
+
+# scratchpad bindings
+bindsym $mod+Shift+F12 move scratchpad
+bindsym $mod+F12 scratchpad show
+
+# screenshots
+bindsym --release Print exec --no-startup-id scrot -e 'mv $f ~/Pictures/screenshots'
+bindsym --release Shift+Print exec --no-startup-id scrot -s -e 'mv $f ~/Pictures/screenshots'
+
+# sticky floating windows
+bindsym $mod+Shift+o sticky toggle
