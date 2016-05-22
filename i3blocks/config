@@ -28,7 +28,7 @@ interval=once
 [audio]
 label=VOL
 instance=Master
-interval=1
+interval=once
 signal=10
 
 [brightness]
