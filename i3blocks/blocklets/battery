@@ -28,6 +28,8 @@ elif [[ "${BATTERY_STATE}" = "Charging" ]]; then
 fi
 
 
+
+
 if [[ "${BATTERY_STATE}" = "Charging" ]]; then
   echo "${BATTERY_POWER}% CHR (${BATTERY_REMAINING})"
   echo "${BATTERY_POWER}% CHR (${BATTERY_REMAINING})"

@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# Left click
+# Scroll Up
 if [[ "${BLOCK_BUTTON}" -eq 4 ]]; then
   amixer -q sset Master 5%+
 # Middle click
 elif [[ "${BLOCK_BUTTON}" -eq 2 ]]; then
   amixer -q sset Master toggle
-# Right click
+# Scroll Down
 elif [[ "${BLOCK_BUTTON}" -eq 5 ]]; then
   amixer -q sset Master 5%-
 fi

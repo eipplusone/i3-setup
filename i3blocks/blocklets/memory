@@ -54,8 +54,8 @@ END {
         color="#dc322f"
       }
     }
-		printf("RAM %.1f%c\n", mem_used, byte_size)
-		printf("RAM %.1f%c\n", mem_used, byte_size)
+		printf("%.1f%c\n", mem_used, byte_size)
+		printf("%.1f%c\n", mem_used, byte_size)
     printf("%s\n", color)
   }
 
