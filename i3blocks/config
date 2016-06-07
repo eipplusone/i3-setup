@@ -23,11 +23,10 @@ label=VPN
 interval=10
 
 [keymap_switcher]
-label=KB
+label=
 interval=once
 
 [audio]
-label=VOL
 instance=Master
 interval=once
 signal=10
@@ -40,6 +39,7 @@ interval=once
 [battery]
 label=BAT
 instance=0
+signal=11
 interval=60
 
 [battery]
