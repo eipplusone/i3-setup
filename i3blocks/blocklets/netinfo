@@ -38,7 +38,11 @@ if [ "$(cat /sys/class/net/$IF/operstate)" == "down" ] || [ "$IF" == "lo" ]; the
 fi
 
 IPADDR="$(ip addr show $IF | grep inet | head -n 1 | cut -f6 -d' ' | cut -f1 -d'/')"
-
+if [ "$IPADDR" == "127.0.0.1" ]; then
+  echo "" 
+  echo ""
+  echo ""
+fi
 #------------------------------------------------------------------------
 
 if [ "$IF" == "wlan0" ]; then

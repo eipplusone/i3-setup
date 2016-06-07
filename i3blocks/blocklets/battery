@@ -24,19 +24,22 @@ if [[ "${BATTERY_STATE}" = "Discharging" ]]; then
     COLOR="#A8FF00"
   fi
 elif [[ "${BATTERY_STATE}" = "Charging" ]]; then
-  BATTERY_REMAINING=$(echo "${BATTERY_INFO}" | cut -d' ' -f5 | cut -d: -f1-2)
+  BATTERY_REMAINING="$(echo "${BATTERY_INFO}" | cut -d' ' -f5 | cut -d: -f1-2)"
 fi
 
-
-
+if [[ "${BATTERY_REMAINING}" = "charging" ]] || [[ "${BATTERY_REMAINING}" = "discharging" ]]; then
+  BATTERY_REMAINING=""
+else
+  BATTERY_REMAINING=" (${BATTERY_REMAINING})"
+fi
 
 if [[ "${BATTERY_STATE}" = "Charging" ]]; then
-  echo "${BATTERY_POWER}% CHR (${BATTERY_REMAINING})"
-  echo "${BATTERY_POWER}% CHR (${BATTERY_REMAINING})"
+  echo "${BATTERY_POWER}% CHR${BATTERY_REMAINING}"
+  echo "${BATTERY_POWER}% CHR${BATTERY_REMAINING}"
   echo "$COLOR"
 elif [[ "${BATTERY_STATE}" = "Discharging" ]]; then
-  echo "${BATTERY_POWER}% DIS (${BATTERY_REMAINING})"
-  echo "${BATTERY_POWER}% DIS (${BATTERY_REMAINING})"
+  echo "${BATTERY_POWER}% DIS${BATTERY_REMAINING}"
+  echo "${BATTERY_POWER}% DIS${BATTERY_REMAINING}"
   echo "$COLOR"
 elif [ -z "${BATTERY_INFO}" ]; then
   echo ""
